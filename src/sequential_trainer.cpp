@@ -17,7 +17,6 @@ void SequentialTrainer::train(std::vector<double>& x,
 
             double pred= w*x[i] + b;
             double error = pred - y[i];
-
             dw += error * x[i];
             db += error;
         }
@@ -25,4 +24,5 @@ void SequentialTrainer::train(std::vector<double>& x,
         w -= lr * dw;
         b -= lr * db;
     }
+
 }

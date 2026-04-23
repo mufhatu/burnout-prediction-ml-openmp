@@ -8,5 +8,4 @@ public :
                double& w,
                double& b) override;
 
-    
 };

@@ -7,6 +7,6 @@ public :
                        std::vector<double>& y,
                        double& w,
                        double& b) = 0;
-
     virtual ~Trainer(){}
+
 };
