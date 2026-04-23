@@ -40,7 +40,6 @@ void loadCSV(
             double label = encodeLabel(value);
 
             x.push_back(stress);
-            y.push_back(label);
-            
+            y.push_back(label);         
         }
     }
