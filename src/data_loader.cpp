@@ -9,9 +9,11 @@ std::string trim(const std::string& str) {
     if (first == std::string::npos) return "";
     size_t last = str.find_last_not_of(' ');
     return str.substr(first, (last - first + 1));
+
 }
 
 void loadCSV(
+
     const std::string& filename,
     std::vector<double>& x,
     std::vector<double>& y){
@@ -39,5 +41,6 @@ void loadCSV(
 
             x.push_back(stress);
             y.push_back(label);
+            
         }
     }
