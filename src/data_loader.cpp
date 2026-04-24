@@ -2,44 +2,82 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <iostream>
 #include "encoder.h"
+#include "data_loader.h"
 
-std::string trim(const std::string& str) {
-    size_t first = str.find_first_not_of(' ');
+static std::string trim(const std::string& str) {
+    size_t first = str.find_first_not_of(" \r\n\t");
     if (first == std::string::npos) return "";
-    size_t last = str.find_last_not_of(' ');
+    size_t last = str.find_last_not_of(" \r\n\t");
     return str.substr(first, (last - first + 1));
-
 }
 
 void loadCSV(
 
     const std::string& filename,
-    std::vector<double>& x,
+    std::vector<std::vector<double>>& X,
     std::vector<double>& y){
 
         std::ifstream file(filename);
+
+        if (!file.is_open()) {
+        std::cerr << "Error: could not open " << filename << "\n";
+        return;
+        }
+
         std::string line;
 
         //skip header
         std::getline(file,line);
+        
+        int lineNum = 1;
 
         while (std::getline(file,line)){
+            lineNum++;
+
+            if (line.empty()) continue;
 
             std::stringstream ss(line);
-            std::string value;
+            std::string val;
+            std::vector<double> row;
+            bool bad = false;
 
-            //stress level
-            std::getline(ss,value,',');
-            value = trim(value);
-            if (value.empty()) continue;
-            double stress = std::stod(value);
+            // Read 10 numeric features:
+            // age, experience_years, daily_work_hours, sleep_hours,
+            // caffeine_intake, bugs_per_day, commits_per_day,
+            // meetings_per_day, screen_time, exercise_hours
+            for (int i = 0; i < 10; i++) {
+                if (!std::getline(ss, val, ',')) { bad = true; break; }
+                val = trim(val);
+                try {
+                    row.push_back(std::stod(val));
+                } catch (...) {
+                    bad = true; break;
+                }
+            }   
+        
 
-            //burnout label (TEXT → encode)
-            std::getline(ss, value, ',');
-            double label = encodeLabel(value);
+            if (bad) continue;  // ← add this line right here
 
-            x.push_back(stress);
-            y.push_back(label);         
-        }
-    }
+            // stress_level (col 11)
+            if (!std::getline(ss, val, ',')) continue;
+            val = trim(val);
+            try {
+                row.push_back(std::stod(val));
+            } catch (...) { continue; }
+
+            // burnout_level (col 12)
+            if (!std::getline(ss, val, ',')) continue;
+            double label = encodeLabel(trim(val));
+
+            X.push_back(row);
+            y.push_back(label);
+    
+    }    
+    
+
+    std::cout << "Loaded " << X.size() << " rows, "
+              << (X.empty() ? 0 : X[0].size()) << " features.\n";
+
+}
