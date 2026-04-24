@@ -80,5 +80,45 @@ int main() {
                   << " | Seq: "  << decodeLabel(pred_seq)
                   << " | Par: "  << decodeLabel(pred_par) << "\n";
     }
+
+
+    // ── Stress test ───────────────────────────────────────────────────
+    std::cout << "\n========================================\n";
+    std::cout << "  Stress test\n";
+    std::cout << "========================================\n";
+    std::cout << "  Rows      | Sequential | Parallel | Speedup\n";
+    std::cout << "  ----------|------------|----------|--------\n";
+
+    for (int mult : {5, 10, 20, 50}) {
+        std::vector<std::vector<double>> X_big;
+        std::vector<double> y_big;
+        for (int i = 0; i < mult; i++) {
+            X_big.insert(X_big.end(), X.begin(), X.end());
+            y_big.insert(y_big.end(), y.begin(), y.end());
+        }
+
+        std::vector<double> w2, w3;
+        double b2 = 0, b3 = 0;
+
+        auto s1 = std::chrono::high_resolution_clock::now();
+        SequentialTrainer seq2;
+        seq2.train(X_big, y_big, w2, b2);
+        auto s2 = std::chrono::high_resolution_clock::now();
+
+        auto s3 = std::chrono::high_resolution_clock::now();
+        ParallelTrainer par2;
+        par2.train(X_big, y_big, w3, b3);
+        auto s4 = std::chrono::high_resolution_clock::now();
+
+        auto t_seq = std::chrono::duration_cast<std::chrono::milliseconds>(s2 - s1).count();
+        auto t_par = std::chrono::duration_cast<std::chrono::milliseconds>(s4 - s3).count();
+        double spdup = (double)t_seq / t_par;
+
+        std::cout << "  " << X_big.size()
+                << "\t| " << t_seq << "ms"
+                << "\t| " << t_par << "ms"
+                << "\t| " << spdup << "x\n";
+    }
+
     return 0;
 }
