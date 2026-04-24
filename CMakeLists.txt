@@ -10,12 +10,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
+#enable OPENMP
+find_package(OpenMP REQUIRED)
+
 add_executable(main
     src/main.cpp
     src/sequential_trainer.cpp
     src/data_loader.cpp
+    src/parallel_trainer.cpp
 )
-
 
 # GOOGLE TEST:
 include(FetchContent)
@@ -38,10 +41,12 @@ enable_testing()
 
 add_executable(runTests tests/test_main.cpp
     src/sequential_trainer.cpp
+    src/parallel_trainer.cpp
     src/data_loader.cpp
 )
 
 target_link_libraries(runTests PRIVATE
+    OpenMP::OpenMP_CXX
     gtest_main
 )
 

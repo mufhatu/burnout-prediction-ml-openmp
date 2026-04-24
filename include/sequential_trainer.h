@@ -1,11 +1,10 @@
 #pragma once
-#include "trainer.h"
+#include <vector>
 
-class SequentialTrainer : public Trainer {
-public :
-    void train(std::vector<double>& x,
+class SequentialTrainer {
+public:
+    void train(const std::vector<std::vector<double>>& X,
                std::vector<double>& y,
-               double& w,
-               double& b) override;
-
+               std::vector<double>& w,
+               double& b);
 };
