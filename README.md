@@ -5,6 +5,8 @@ features using multi-feature linear regression trained with gradient descent.
 Compares a sequential single-threaded implementation against a parallelised
 version using OpenMP across a real-world dataset of 6,750 developers.
 
+[![CI Pipeline](https://github.com/mufhatu/burnout-prediction-ml-openmp/actions/workflows/ci.yml/badge.svg)](https://github.com/mufhatu/burnout-prediction-ml-openmp/actions/workflows/ci.yml)
+
 ## Results
 
 ### Speedup across dataset sizes
