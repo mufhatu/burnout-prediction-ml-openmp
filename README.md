@@ -54,23 +54,35 @@ Expected output:
 [  PASSED  ] 3 tests.
 
 ## Project structure
-
+```text
 ml_burnout_parallel/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── data/
-│   └── developer_burnout_dataset.csv   # 6,750 rows, 12 columns
+│   └── developer_burnout_dataset.csv
 ├── include/
 │   ├── sequential_trainer.h
 │   ├── parallel_trainer.h
 │   ├── data_loader.h
-│   └── encoder.h
+│   ├── encoder.h
+│   └── strategy/
+│       ├── analysis_strategy.h
+│       ├── prediction_strategy.h
+│       └── stress_test_strategy.h
 ├── src/
 │   ├── main.cpp
-│   ├── sequential_trainer.cpp          # Gradient descent, single-threaded
-│   ├── parallel_trainer.cpp            # Gradient descent, OpenMP parallelised
-│   └── data_loader.cpp
+│   ├── sequential_trainer.cpp
+│   ├── parallel_trainer.cpp
+│   ├── data_loader.cpp
+│   └── strategy/
+│       ├── prediction_strategy.cpp
+│       └── stress_test_strategy.cpp
 ├── tests/
-│   └── test_main.cpp                   # GoogleTest suite (3 tests)
+│   └── test_main.cpp
+├── Dockerfile
 └── CMakeLists.txt
+```
 ## Tech stack
 
 - C++17
