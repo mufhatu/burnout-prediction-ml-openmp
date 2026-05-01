@@ -17,6 +17,8 @@ add_executable(main
     src/sequential_trainer.cpp
     src/data_loader.cpp
     src/parallel_trainer.cpp
+    src/strategy/stress_test_strategy.cpp
+    src/strategy/prediction_strategy.cpp
 )
 
 target_link_libraries(main PRIVATE OpenMP::OpenMP_CXX)
