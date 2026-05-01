@@ -5,9 +5,12 @@
 #include <memory>
 #include "sequential_trainer.h"
 #include "parallel_trainer.h"
+#include "strategy/analysis_strategy.h"
 #include "strategy/stress_test_strategy.h"
 #include "strategy/prediction_strategy.h"
 
+/* The `loadCSV` function is responsible for loading data from a CSV file into two vectors: `X` and
+`y`*/
 void loadCSV(const std::string& filename,
              std::vector<std::vector<double>>& X,
              std::vector<double>& y);
@@ -32,6 +35,7 @@ int main() {
     loadCSV("../data/developer_burnout_dataset.csv", X, y);
 
     // Sequential training
+    // =========================
     std::vector<double> w_seq;
     double b_seq = 0;
 
@@ -49,6 +53,7 @@ int main() {
     std::cout << "Time: " << seq_time.count() << "ms\n\n";
 
     // Parallel training
+    // =========================
     std::vector<double> w_par;
     double b_par = 0;
 
@@ -65,9 +70,12 @@ int main() {
     std::cout << "Time: " << par_time.count() << "ms\n\n";
 
     // Speedup
+    // =========================
     double speedup = (double)seq_time.count() / par_time.count();
     std::cout << "Speedup: " << speedup << "x\n\n";
 
+    // Prediction sample and Stress Test
+    // =========================
 
     std::unique_ptr<AnalysisStrategy> prediction =
     std::make_unique<PredictionStrategy>();
